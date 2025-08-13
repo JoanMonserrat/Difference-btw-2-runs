@@ -52,30 +52,30 @@ def on_button_click():
 # Step 1 : Creo que lo primero, sería modificar el dataframe para que cada test tenga tantas líneas como valores de threshold introducidos y a cada línea darle un ranglelistID. Insertamos este dataframe en:
 # Primera aproximación para tomar según el número de tresholds que tenga cada test, que se generen 1, 2 o 3 líneas con ese test y ese valor de threshold para insertar:
 
-data = []
+    data = []
 
-df = pd.read_excel('Dif2runs.xlsx')
-for idx, row in df.iterrows():
-    nombre = row[0]  # Primera columna
-    valores = row[1:]  # El resto de columnas
-    for v in valores:
-        data.append({'nombre': nombre, 'valor': int(v)})
+    df = pd.read_excel('Dif2runs.xlsx')
+    for idx, row in df.iterrows():
+        nombre = row[0]  # Primera columna
+        valores = row[1:]  # El resto de columnas
+        for v in valores:
+            data.append({'nombre': nombre, 'valor': int(v)})
 
 # Crear nuevo DataFrame con la estructura deseada
-df_new = pd.DataFrame(data)
+    df_new = pd.DataFrame(data)
 
-print(df_new)
+    print(df_new)
 
 # Añadir un número creciente a cada una de las filas generadas que serán el RangedList:
 
-df_new['numero'] = range(1, len(df_new) + 1)
+    df_new['numero'] = range(1, len(df_new) + 1)
 
-print(df_new)
+    print(df_new)
 
 #def_new sería el dataframe a insertar en la primera tabla, ya debería tener todo lo correcto
 
 # Guardar el nuevo DataFrame a Excel para revisar
-df_new.to_excel(r"C:\\Users\\1TableDif2Runs.xlsx", index=False, engine='openpyxl')
+    df_new.to_excel(r"C:\\Users\\1TableDif2Runs.xlsx", index=False, engine='openpyxl')
   
 # Step 2:  A partir del dataframe generado previamente, generamos uno nuevo, juntando en una linea los un test ID y los diferentes RangeListID identificados. Insertamos este dataframe en: 
 
@@ -83,18 +83,18 @@ df_new.to_excel(r"C:\\Users\\1TableDif2Runs.xlsx", index=False, engine='openpyxl
 
 # Agrupar por 'nombre' y juntar los números en una cadena separada por coma. Revisar si así me va bien
 
-df_grouped = df_new.groupby('nombre').agg({
-    'valor': 'first',  
-    'numero': lambda x: ', '.join(map(str, x))
-}).reset_index()
+    df_grouped = df_new.groupby('nombre').agg({
+        'valor': 'first',
+        'numero': lambda x: ', '.join(map(str, x))
+    }).reset_index()
 
-print(df_grouped)
+    print(df_grouped)
 
 # Con esto tendríamos el segundo dataframe, "df_grouped" que se insertaría en la segunda tabla.
 
   
 #Una vez generado el segundo dataframe, lo guardamos por si fuera necesario revisar:
-df_grouped.to_excel(r"C:\\Users\\2TableDif2Runs.xlsx", index=False, engine='openpyxl')
+    df_grouped.to_excel(r"C:\\Users\\2TableDif2Runs.xlsx", index=False, engine='openpyxl')
 
 
 
@@ -103,7 +103,7 @@ df_grouped.to_excel(r"C:\\Users\\2TableDif2Runs.xlsx", index=False, engine='open
 
 
 #Conexión a la DB. Usaremos pyodbc.
-    df = pd.read_excel("C:\\Users\\dif2runsmodified.xlsx") 
+    df = pd.read_excel("C:\\Users\\dif2runsmodified.xlsx")
 
 
 #Conexión ODBC a caché (se podría hacer con DSN, pero se tendría que configurar, ver primero si podemos hacerlo sin DSN, haciendo toda la lista de parámetros asi:
