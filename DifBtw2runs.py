@@ -8,29 +8,6 @@ import pyodbc
 
 #Botón con toda la lógica del script, si se usa el script por un tiempo largo sería buena práctica dividir en funciones más pequeñas para testing
 def on_button_click():
-    try:
-        # Verificar pandas
-        print("Verificando pandas...")
-        import pandas as pd
-        print("pandas está disponible.")
-    except ImportError as e:
-        print(f"Error al importar pandas: {e}")
-
-    try:
-        # Verificar openpyxl
-        print("Verificando openpyxl...")
-        import openpyxl
-        print("openpyxl está disponible.")
-    except ImportError as e:
-        print(f"Error al importar openpyxl: {e}")
-
-    try:
-        # Verificar pyodbc
-        print("Verificando pyodbc...")
-        import pyodbc
-        print("pyodbc está disponible.")
-    except ImportError as e:
-        print(f"Error al importar pyodbc: {e}")
         
     file_path = r"C:\\Users\\Dif2runs.xlsx"
 
@@ -41,6 +18,7 @@ def on_button_click():
         print(df)
     else:
         print("No está el archivo en el path con el nombre correcto.")
+        return
 
 
 
@@ -54,7 +32,7 @@ def on_button_click():
 
     data = []
 
-    df = pd.read_excel('Dif2runs.xlsx')
+   
     for idx, row in df.iterrows():
         nombre = row[0]  # Primera columna
         valores = row[1:]  # El resto de columnas
@@ -103,8 +81,6 @@ def on_button_click():
 
 
 #Conexión a la DB. Usaremos pyodbc.
-    df = pd.read_excel("C:\\Users\\dif2runsmodified.xlsx")
-
 
 #Conexión ODBC a caché (se podría hacer con DSN, pero se tendría que configurar, ver primero si podemos hacerlo sin DSN, haciendo toda la lista de parámetros asi:
     
