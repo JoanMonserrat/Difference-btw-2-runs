@@ -146,9 +146,9 @@ df_grouped.to_excel(r"C:\\Users\\2TableDif2Runs.xlsx", index=False, engine='open
 
 # GUI muy simple con tkinter   
 root = tk.Tk()
-root.title("Coded Results script")
+root.title("Dif. Btw 2 runs script")
 
-label = tk.Label(root, text="\u26A0\u26A0\u26A0 Before running the script, please follow the documentation.\n Resumed: \n First step, take the 2 .xml from the MPL DB, open an excel, click on Data>From othe sources and use the.xml.\n Second step, place the 2 .xls files in the folder C:\\Users\\    with the following 2 names: CodedResultsTable1.xls and CodedResultsTable2.xls\u26A0\u26A0\u26A0")
+label = tk.Label(root, text="\u26A0\u26A0\u26A0 Before running the script, please follow the documentation.\n Resumed: \n First step, take the .xml from the MPL DB, open an excel, click on Data>From othe sources and use the.xml.\n Second step, place the .xls file in the folder C:\\Users\\    with the following name: Dif2runs.xlsx\u26A0\u26A0\u26A0")
 label.pack(pady=20)
 
 button = tk.Button(root, text="Script!", command=on_button_click)
