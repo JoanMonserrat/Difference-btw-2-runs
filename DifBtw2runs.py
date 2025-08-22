@@ -28,6 +28,8 @@ def on_button_click():
 
 # Lógica para la preparación del dataframe a insertar:
 # Step 1 : Creo que lo primero, sería modificar el dataframe para que cada test tenga tantas líneas como valores de threshold introducidos y a cada línea darle un ranglelistID. Insertamos este dataframe en:
+        #Revisando, primero hay que conectar a la DDBB de nLO, sacar el test ID relacionado con la abreviacion del test.
+        
 # Primera aproximación para tomar según el número de tresholds que tenga cada test, que se generen 1, 2 o 3 líneas con ese test y ese valor de threshold para insertar:
 
     data = []
