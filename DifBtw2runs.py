@@ -40,12 +40,18 @@ def on_button_click():
 # Lógica para la preparación del dataframe a insertar:
 # Step 1 : Creo que lo primero, sería modificar el dataframe para que cada test tenga tantas líneas como valores de threshold introducidos y a cada línea darle un ranglelistID. Insertamos este dataframe en:
 # Primera aproximación para tomar según el número de tresholds que tenga cada test, que se generen 1, 2 o 3 líneas con ese test y ese valor de threshold para insertar:
+            
+        columnas_a_eliminar = ["GroupeValidation", "Sexe", "Agedebut", "Agefin", "UsuelleBasse", "UsuelleHaute", "AlarmeBasse", "AlarmeHaute", "RepassBasse", "RepassHaute", "Deltapourcent", "DeltaAbsolu", "DeltaBloquant", "Autovalidation", "SeuilJours"]
 
+        df = df.drop(columns=columnas_a_eliminar)
+
+        print(df)
+            
         data = []
 
    
         for idx, row in df.iterrows():
-            nombre = row[0]  # Primera columna
+            nombre = row.iloc[0]  # Primera columna
             valores = row[1:]  # El resto de columnas
             for v in valores:
                 data.append({'nombre': nombre, 'valor': int(v)})
@@ -65,10 +71,9 @@ def on_button_click():
 
 # Guardar el nuevo DataFrame a Excel para revisar
         df_new.to_excel(r"C:\\Users\\1TableDif2Runs.xlsx", index=False, engine='openpyxl')
+            
   
 # Step 2:  A partir del dataframe generado previamente, generamos uno nuevo, juntando en una linea los un test ID y los diferentes RangeListID identificados. Insertamos este dataframe en: 
-
-
 
 # Agrupar por 'nombre' y juntar los números en una cadena separada por coma. Revisar si así me va bien
 
