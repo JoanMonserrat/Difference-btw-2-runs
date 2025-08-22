@@ -3,12 +3,15 @@ import uuid
 import tkinter as tk
 import os
 import openpyxl 
-import pyodbc 
+import pyodbc
+from tkinter import filedialog
 
 
 def on_button_click():
         
-    file_path = r"C:\\Users\\Dif2runs.xlsx"
+    #file_path = r"C:\\Users\\Dif2runs.xlsx"
+    file_path = filedialog.askopenfilename()
+
 
     if os.path.exists(file_path):
         print("Directorio actual:", os.getcwd())
