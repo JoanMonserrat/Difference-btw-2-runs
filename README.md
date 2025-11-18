@@ -8,4 +8,4 @@ Information needed:
 - Tables to add the information in nLO
 
 
-VM used for the testing: M2I2871 but need to check if still works
+VM used for the testing: 
