@@ -25,6 +25,7 @@ def on_button_click():
     # Conexión a la DB. Usaremos pyodbc.
 
     # Conexión ODBC a caché (se podría hacer con DSN, pero se tendría que configurar, ver primero si podemos hacerlo sin DSN, haciendo toda la lista de parámetros asi:
+        
     dsn = 'Script connection'  # Aquí reemplazar 'NombreDSN' con el nombre del DSN configurado
     user = '_SYSTEM'
     password = 'INFINITY'
@@ -37,26 +38,54 @@ def on_button_click():
 
 
 
-# Lógica para la preparación del dataframe a insertar:
-# Step 1 : Creo que lo primero, sería modificar el dataframe para que cada test tenga tantas líneas como valores de threshold introducidos y a cada línea darle un ranglelistID. Insertamos este dataframe en:
+# Lógica para la preparación de los dataframe a insertar
+
+            
+# DATAFRAME 1 
+# Modificar el dataframe para que cada test tenga tantas líneas como valores de threshold introducidos y a cada línea darle un ranglelistID. Insertamos este dataframe en "Diff2runsRange"
 # Primera aproximación para tomar según el número de tresholds que tenga cada test, que se generen 1, 2 o 3 líneas con ese test y ese valor de threshold para insertar:
             
-        columnas_a_eliminar = ["GroupeValidation", "Sexe", "Agedebut", "Agefin", "UsuelleBasse", "UsuelleHaute", "AlarmeBasse", "AlarmeHaute", "RepassBasse", "RepassHaute", "Deltapourcent", "DeltaAbsolu", "DeltaBloquant", "Autovalidation", "SeuilJours"]
+        columnas_a_eliminar = ["GroupeValidation", "Sexe", "Agedebut", "Agefin", "UsuelleBasse", "UsuelleHaute", "AlarmeBasse", "AlarmeHaute", "RepassBasse", "RepassHaute", "Deltapourcent", "DeltaAbsolu", "DeltaBloquant", "Autovalidation", "SeuilJours", "Fourchette1", "Fourchette2", "Fourchette3"]
 
         df = df.drop(columns=columnas_a_eliminar)
 
         print(df)
-            
-        data = []
 
-   
+# Filters of the CSV
+
+# Condición 1: Sousgroupe DEBE ser 0
+
+        condicion_sousgroupe = df['Sousgroupe'] == 0
+
+# Condición 2: SeuilRepassage DEBE ser distinto de 0 Y no nulo
+
+        condicion_seuilrepassage = (
+                df['SeuilRepassage'].notna()  # Asegura que NO es nulo
+                & (df['SeuilRepassage'] != 0) # Asegura que el valor es distinto de 0
+        )
+
+# Aplicar filtros al df
+
+        mascara_final = condicion_sousgroupe & condicion_seuilrepassage
+
+        df = df[mascara_final]
+
+        print(df)
+
+
+# Iniciar lista en blanco para iterar el dataframe con la lógica y llenarla
+
+        data = [] 
+
         for idx, row in df.iterrows():
             nombre = row.iloc[0]  # Primera columna
             valores = row[1:]  # El resto de columnas
             for v in valores:
                 data.append({'nombre': nombre, 'valor': int(v)})
+                    
 
-# Crear nuevo DataFrame con la estructura deseada
+# Crear nuevo DataFrame con la lista que se ha generado al iterar el dataframe previo.
+
         df_new = pd.DataFrame(data)
 
         print(df_new)
@@ -67,13 +96,18 @@ def on_button_click():
 
         print(df_new)
 
-#def_new sería el dataframe a insertar en la primera tabla, ya debería tener todo lo correcto
+#def_new, dataframe a insertar en la primera tabla
 
-# Guardar el nuevo DataFrame a Excel para revisar
+# Opcional, Guardar el nuevo DataFrame a Excel para revisar
         df_new.to_excel(r"C:\\Users\\1TableDif2Runs.xlsx", index=False, engine='openpyxl')
             
-  
-# Step 2:  A partir del dataframe generado previamente, generamos uno nuevo, juntando en una linea los un test ID y los diferentes RangeListID identificados. Insertamos este dataframe en: 
+
+
+
+
+
+
+# DATAFRAME 2:  A partir del dataframe generado previamente, generamos uno nuevo, juntando en una linea los test ID y los diferentes RangeListID identificados. Insertamos este dataframe en "Diff2RunsRangeVersions" 
 
 # Agrupar por 'nombre' y juntar los números en una cadena separada por coma. Revisar si así me va bien
 
@@ -92,7 +126,12 @@ def on_button_click():
 
 
 
-#Insert primera tabla. Hay que modificar valores tanto de la tabla SQL como del dataframe
+
+
+
+# INSERTS SQL
+            
+# INSERT PRIMERA TABLA. Hay que modificar valores tanto de la tabla SQL como del dataframe
 
         for index, row in df_new.iterrows():
             cursor.execute(
@@ -103,7 +142,8 @@ def on_button_click():
         
         print("✅ Datos insertados en tabla Diff2Range") #Debería juntar todo esto en un bloque try y hacer otro except para detectar errores.
 
-#Insert segunda tabla SQL en nLO
+# INSERT SEGUNDA TABLA SQL en nLO
+            
         for _, row in df_grouped.iterrows():
             cursor.execute(
                 "INSERT INTO core_test_config_dm_tables.Diff2RunsRangeVersions "
@@ -118,7 +158,10 @@ def on_button_click():
     except pyodbc.Error as e:
         print(f"Error de conexión: {e}")
 
+
+
 # GUI muy simple con tkinter   
+
 root = tk.Tk()
 root.title("Dif. Btw 2 runs script")
 
